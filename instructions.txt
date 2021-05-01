@@ -1,0 +1,199 @@
+1. Download/Install Node.js:
+        https://nodejs.org/en/
+
+2. If you're using vscode the first extension you want to install is 'Prettier".
+
+3. You should also install the 'Python' extension.
+
+4. Next install the 'Django' extension.
+
+5. Then we want the 'React' extension:
+        ES7 React/Redux/GraphQL/React-Native snippets
+
+6. As well as install the 'Javascript' extension.
+        Javascript (ES6)
+
+7. Create your virtual environment:
+        conda create --name music_controller python=3
+
+8. Activate the environment:
+        source activate music_controller
+
+9. Create a new github repository and initialize it locally.
+
+10. Install django and djangorestframework through conda:
+        conda install django
+        conda install djangorestframework
+
+11. To see what git branch you're on run:
+        git status
+
+12. List All Branches:
+        To see local branches run:
+                git branch
+        To see remote branches run:
+                git branch -r
+        To see all local and remote branches run:
+                git branch -a
+13. To create a new branch run:
+        git checkout -b my-branch-name
+
+14. To get a list of all branches from the remote run:
+        git pull
+
+15. To switch to that branch run:
+        git checkout --track origin/my-branch-name
+
+16. Push to a branch:
+        If your local branch does not exist on the remote, run:
+                git push - origin my-branch-name
+                or
+                git push -u origin HEAD
+
+17. The first thing we want to do is to start a project:
+        django-admin startproject music_controller
+
+18. We want to make sure we are in our project directory, so cd into it:
+        cd music_controller
+
+19. Then we want to create an app:
+        django-admin startapp api
+
+20. We then need to add our api to the 'INSTALLED_APPS' list in our settings.py
+
+21. Let's also add our rest framework into our installed apps.
+
+22. Now let's create our first view by going to our views.py in our api app.
+
+23. After we create our requests function we're goin to want to create our URLs and we do that
+    by creating our urls.py in our api app folder.
+        touch api/urls.py
+
+24. Since we'll be using our urls.py file lets split the page so we can see both files at the 
+    same time.
+
+25. Let's then start working with our urls.py in the music_app
+    project folder.
+
+26. Let's make our migrations:
+        python manage.py makemigrations
+    What this is doing is creating a database to store our current changes    
+
+27. Then migrate:
+        python manage.py migrate
+    This adds the db.sqlite3 file which manages the database for our application
+
+28. Test the server:
+        python manage.py runserver
+
+29. Let's get started with our model then look at our api endpoint.
+
+30. The basic rule in django is that we want to have FAT models and THIN views. Which means 
+    put most of your logic on your models.    
+
+31. Since we modified our model, we need to makemigrations again:
+        python manage.py makemigrations
+
+32. To see all of your conda environments run:
+	conda info --envs
+
+32. In order for our fronted to access specific rooms we need to create a serializer class:
+        touch api/serializers.py
+    What a serializer does is it translates our model into a json response.    
+
+33. Now we want to creat an api view with a list of all the different rooms.
+
+34. Now we need to link our url to our view.
+
+35. It's now time to add react. First we need to make sure npm is installed
+        npm
+    If the command works you have it installed.
+
+36. Create a new app for our frontend:
+        django-admin startapp frontend
+    This app is going to be related to react aspect of our project.
+
+37. Next thing we need to do is cd into the new app and create a static, 
+    source, template folder:
+        cd frontend
+        mkdir templates
+        mkdir static
+    This folder holds anything the browser caches. You then want to add more subfolder in static:
+                cd static
+                mkdir frontend
+                mkdir css
+                mkdir images
+**if you want to skip the autosuggestion use: CTRL + 'enter'
+or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnter": "off"
+
+38. Make another folder in frontend called 'src' and in that folder make another folder
+    called 'components'
+
+39. Now we need to initialize an npm project:
+        npm init -y
+    This creates everything we need for our fronted project.    
+
+40. Install all the packages we need with npm starting with webpack:
+        npm i webpack webpack-cli --save-dev
+
+41. The next package we need is bable:
+        npm i @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
+    What this does is allow us to run our javascript in older browsers.    
+
+42. Next let's install react:
+        npm i react react-dom --save-dev
+
+43. Next install material-ui which is prebuild components so we don't have to style the webpage ourselves:
+        npm install @material-ui/core
+
+44. Next is installing another thing for babel:
+        npm install @babel/plugin-proposal-class-properties
+    This is so that we can use async and await in our javascript.     
+
+45. Next is something to reroute our pages:
+        npm install react-router-dom
+
+46. The next thing is for material-ui:
+        npm install @material-ui/icons
+
+47. Next thing to do is set up configuration scripts to run our webpack and babel.
+    Start by creating a new file in the frontend app called 'babel.config.json'. 
+
+48. In this file we want to setup the babel loaders.
+
+49. Next create a new javascript file in frontend called 'webpack.config.js'.
+
+50. Now go to the package.json file and add a new script to run webpack and start by removing:
+        "test": "echo \"Error: no test specified\" && exit 1"
+
+51. Then add:
+        "dev": "webpack --mode prodution --watch"
+    This tells us to run webpack in production mode whenever we run our python server.  
+        "build": "webpack --mode production"
+
+52. Next make another javascript file in the src folder:
+        index.js
+
+53. Now we need to make it so that our django app that react will take control of. Start by creating
+    a new folder in templates called 'frontend' then create a file in fronted called 'index.html'.    
+
+54. Now we need to go into the views.py in our frontend and render our index template and let
+    react take care of it.
+
+55. Create a urls.py file in the frontend app.
+
+56. Then go to the urls in the music_app folder and configure that.
+
+57. Create a new component called 'App.js'.
+
+58. Now we want to render the component that we've just made and render it in index.html.
+
+59. Make create a new file in src called 'index.js'.
+
+60. Now we want to test our server and run the script in the package.json file which should look
+    at the index.js file, import the App and bundle the code, output something to static/frontend
+    and execute the file main.js. Start by changing the directory into the frontend app and run:
+        npm run dev
+    This is the script that we added in package.json.    
+
+70. Add the frontend app to the installed apps.
