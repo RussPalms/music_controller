@@ -197,3 +197,17 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
     This is the script that we added in package.json.    
 
 70. Add the frontend app to the installed apps.
+
+71. Now let's add styling. Start by adding a css file to the frontend:
+        touch fronted/static/css/index.css
+
+72. Next start adding things to App.js.
+
+73. Make a new javascript file in components called:
+        HomePage.js
+
+74. Create a room page and create room page in the components:
+        RoomJoinPage.js
+        CreateRoomPage.js
+
+75. 

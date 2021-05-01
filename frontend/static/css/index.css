@@ -1,0 +1,27 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* these are the styles for the main div which is wrapping the app div */
+#main {
+    /* this is so that the posistion is not moving around 
+    basically there aren't going to be any scroll bars*/
+    position: fixed;
+    /* this just tells our main div to through it at the top left corner of our screen 
+    and make its width and height fill the entire screen*/
+    width: 100%;
+    height: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+/* thse are the sytles for the app div which is where our app is going to be rendered */
+#app {
+    width: 100%;
+    height: 100%;
+    /* this is for some of the components that will be using the flex grid */
+    display: flex;
+}

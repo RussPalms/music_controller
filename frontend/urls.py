@@ -4,5 +4,7 @@ from .views import index
 
 urlpatterns = [
     # this renders the index path whenever we render the home page
-    path('', index)
+    path('', index),
+    path('join', index),
+    path('create', index)
 ]
