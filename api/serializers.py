@@ -10,3 +10,10 @@ class RoomSerializer(serializers.ModelSerializer):
         # it's automatically created when a model is created and in this case, when 
         # we insert a new room into our database
         fields = ('id', 'code', 'host', 'guest_can_pause', 'votes_to_skip', 'created_at')
+
+# this is to set up a new post request
+class CreateRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        # these are the fields that we want to send in our post request
+        fields = ('guest_can_pause', 'votes_to_skip')

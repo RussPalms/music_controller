@@ -51,7 +51,7 @@
                 git push -u origin HEAD
 
 17. The first thing we want to do is to start a project:
-        django-admin startproject music_controller
+        django-admin startproject music_app
 
 18. We want to make sure we are in our project directory, so cd into it:
         cd music_controller
@@ -210,4 +210,12 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
         RoomJoinPage.js
         CreateRoomPage.js
 
-75. 
+75. Let's start to create a view that can create a room for us by heading to the views.py 
+    in our api app and importing a few things in order to write the view.
+
+76. Make another serializer for this view. Make the create room view, then add that to 
+    the ursls.
+
+77. Now create the createroom page.
+
+78.

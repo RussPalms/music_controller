@@ -19,7 +19,7 @@ def generate_unique_code():
 # this is the database for the room
 class Room(models.Model):
     # this is defining the constraints for our field
-    code = models.CharField(max_length=8, default="", unique=True)
+    code = models.CharField(max_length=8, default=generate_unique_code, unique=True)
     # this is going to contain information that links back to the host
     host = models.CharField(max_length=50, unique=True)
     # this next field allows the guest to play the music
