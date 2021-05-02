@@ -48,15 +48,17 @@ class CreateRoomView(APIView):
             host = self.request.session.session_key
             # look at the same room in our database that is trying to create a room now
             queryset = Room.objects.filter(host=host)
-        if queryset.exists():
-            room = queryset[0]
-            room.guest_can_pause = guest_can_pause
-            room.votes_to_skip = votes_to_skip
-            # whenever you're updating an object and using this method of resaving it,
-            # you need to pass in the update fields with the fields you want to update
-            room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
-        else:
-            room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
-            room.save()
-        
-        return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
+            if queryset.exists():
+                room = queryset[0]
+                room.guest_can_pause = guest_can_pause
+                room.votes_to_skip = votes_to_skip
+                # whenever you're updating an object and using this method of resaving it,
+                # you need to pass in the update fields with the fields you want to update
+                room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+                return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+            else:
+                room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
+                room.save()
+                return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
+
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
