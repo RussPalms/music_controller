@@ -239,6 +239,28 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 
 86. Go to the createroompage and make it so that it directs us to the correct page.
 
-89. Now center the create a room page so that it is centered vertically and horizontally.
+89. Now center the create a room page so that it is centered vertically and horizontally. Go to the css file.
 
-90.
+90. Code out the logic for the new component.
+
+91. Now to work on the home page.
+
+92. If the webpage isn't reloading, click on inspect and then right click on reload and click hard resest.
+
+93. Now we need to make sure that whenever the homepage is first loaded that the components render correctly.
+
+94. Start by creating a lifecycle method with async.
+
+95. Work on rerouting the homepage to a room in the user is already in a Room.js
+
+96. Work on room page. Things like leaving a room.
+
+97. Now build out the settings tab so that the host can change the settings of the room.
+
+98. In order to create our settings page we'll just change our state and set it so that it is either
+    looking at the settings page or the room page.    
+
+99. Need to install a new package in frontend.
+        npm install @material-ui/lab
+
+100.

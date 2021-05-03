@@ -6,13 +6,14 @@ from django.shortcuts import render
 # return our custom response
 from rest_framework import generics, status
 # getting our serializer class
-from .serializers import RoomSerializer, CreateRoomSerializer
+from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
 # we also need to import our model
 from .models import Room
 # this is a generic api view
 from rest_framework.views import APIView
 # this is so that we can send a custom response for our view
 from rest_framework.response import Response
+from django.http import JsonResponse
 
 
 # # Create your views here.
@@ -54,6 +55,27 @@ class GetRoom(APIView):
         #now take care of the case when there is no room in our url
         return Response({'Bad Request': 'Code parameter not found in request'}, status=status.HTTP_400_BAD_REQUEST)
 
+class JoinRoom(APIView):
+    lookup_url_kwarg = 'code'
+
+    def post(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        code = request.data.get(self.lookup_url_kwarg)
+        #this should find the room that we're looking for
+        if code != None:
+            room_result = Room.objects.filter(code=code)
+            if len(room_result) > 0:
+                room = room_result[0]
+                #this tells us that the user in its current session is in this room
+                self.request.session['room_code'] = code
+                return Response({'message': 'Room Joined!'}, status.HTTP_200_OK)
+            
+            return Response({'Bad Request': 'Invalid Room Code'}, status.HTTP_400_BAD_REQUEST)
+
+        return Response({'Bad Request': 'Invalid  post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
+
 # what APIView does is overwrite some default methods
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer
@@ -80,10 +102,69 @@ class CreateRoomView(APIView):
                 # whenever you're updating an object and using this method of resaving it,
                 # you need to pass in the update fields with the fields you want to update
                 room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+                self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
             else:
                 room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
                 room.save()
+                self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+
+class UserInRoom(APIView):
+    def get(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+        data = {
+            #this is how we get information from a session
+            'code': self.request.session.get('room_code')
+        }
+        return JsonResponse(data, status=status.HTTP_200_OK)
+
+class LeaveRoom(APIView):
+    #this is a post request, because we will be changing information on the server in this case, the fact that
+    #we alredy have a room code
+    def post(self, request, format=None):
+        if 'room_code' in self.request.session:
+            #this is returning to us the room code and removing it from the session
+            self.request.session.pop('room_code')
+            #checking if they're hosting a room
+            host_id = self.request.session.session_key
+            #if the host leaves, then everyone needs to be kicked out
+            room_results = Room.objects.filter(host=host_id)
+            if len(room_results) > 0:
+                room = room_results[0]
+                room.delete()
+        return Response({'Message': 'Success'}, status=status.HTTP_200_OK)
+
+class UpdateRoom(APIView):
+    serializer_class = UpdateRoomSerializer
+
+    #patch is used to update something on the server
+    def patch(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            guest_can_pause = serializer.data.get('guest_can_pause')
+            votes_to_skip = serializer.data.get('votes_to_skip')
+            code = serializer.data.get('code')
+            #find the room that has the code
+            queryset = Room.objects.filter(code=code)
+            if not queryset.exists():
+                return Response({'msg': 'Room not found.'}, status=status.HTTP_NOT_FOUND)
+
+            room = queryset[0]
+            #check to see if whomever is updating the room is the owner of the room
+            user_id = self.request.session.session_key
+            if room.host != user_id:
+                return Response({'msg': 'You are not the host of this room.'}, status=status.HTTP_403_FORBIDDEN)
+            
+            room.guest_can_pause = guest_can_pause
+            room.votes_to_skip = room.votes_to_skip
+            room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+            return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+
+        return Response({'Bad Request': 'Invalid Data...'}, status=status.HTTP_400_BAD_REQUEST)

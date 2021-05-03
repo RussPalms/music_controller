@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+//all this can be done on one line
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -9,16 +10,27 @@ import { Link } from "react-router-dom";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { FormLabel } from "@material-ui/core";
+//collapse allows things to appear or disappear
+import { Collapse } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
 export default class CreateRoomPage extends Component{
-    defaultVotes = 2;
+    //these are the default parameters
+    static defaultProps = {
+        votesToSkip: 2,
+        guestCanPause: true,
+        update: false,
+        roomCode: null,
+        updateCallback: () => {},
+    };
     constructor(props) {
         super(props);
         // this is going to handle the state of the buttons
         this.state = {
-            guestCanPause: true,
-            votesToSkip: this.defaultVotes
+            guestCanPause: this.props.guestCanPause,
+            votesToSkip: this.props.votesToSkip,
+            errorMsg: "",
+            successMsg: "",
         };
 
         // this is binding the method to the class so that inside the method we have 
@@ -26,6 +38,7 @@ export default class CreateRoomPage extends Component{
         this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this)
         this.handleVotesChange = this.handleVotesChange.bind(this);
         this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
+        this.handleUpdateButtonPressed = this.handleUpdateButtonPressed(this);
     }   
 
     // e is the object that handles this function
@@ -69,9 +82,70 @@ export default class CreateRoomPage extends Component{
             //for now just console log it to see our data
             // .then((data) => console.log(data));
             .then((data) => this.props.history.push("/room/" + data.code));
-    }
+        }
+
+    handleUpdateButtonPressed() {
+        const requestOptions = {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            votes_to_skip: this.state.votesToSkip,
+            guest_can_pause: this.state.guestCanPause,
+            code: this.props.roomCode,
+          }),
+        };
+        fetch("/api/update-room", requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    this.setState({
+                    successMsg: "Room updated successfully!"
+                    });
+                } else {
+                    this.setState({
+                    errorMsg: "Error updating room..."
+                    });
+                }
+                this.props.updateCallback();
+            });
+      }
+
+    renderCreateButtons() {
+        return (
+          <Grid container spacing={1}>
+            <Grid item xs={12} align="center">
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={this.handleRoomButtonPressed}
+              >
+                Create A Room
+              </Button>
+            </Grid>
+            <Grid item xs={12} align="center">
+              <Button color="secondary" variant="contained" to="/" component={Link}>
+                Back
+              </Button>
+            </Grid>
+          </Grid>
+        );
+      }
+    
+      renderUpdateButtons() {
+        return (
+          <Grid item xs={12} align="center">
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={this.handleUpdateButtonPressed}
+            >
+              Update Room
+            </Button>
+          </Grid>
+        );
+      }
 
     render() {
+        const title = this.props.update ? "Update Room" : "Create a Room"
         // a grid in material-ui is the standard for aligning items in a grid vertically 
         // or horizontally
         // it uses the css flexbox
@@ -85,10 +159,35 @@ export default class CreateRoomPage extends Component{
                 extra small, 12 is just the moximum value making the maximum
                 screen width which fills the entire screen*/}
                 <Grid item xs={12} align="center">
-                    {/* typography is basically just a nicely styled header from 
-                    material-ui */}
+                    <Collapse
+                        in={this.state.errorMsg != "" || this.state.successMsg != ""}
+                    >
+                        {this.state.successMsg != "" ? (
+                        <Alert
+                            severity="success"
+                            onClose={() => {
+                            this.setState({ successMsg: "" });
+                            }}
+                        >
+                            {this.state.successMsg}
+                        </Alert>
+                        ) : (
+                        <Alert
+                            severity="error"
+                            onClose={() => {
+                            this.setState({ errorMsg: "" });
+                            }}
+                        >
+                            {this.state.errorMsg}
+                        </Alert>
+                        )}
+                    </Collapse>
+                </Grid>
+                {/* typography is basically just a nicely styled header from 
+                material-ui */}
+                <Grid item xs={12} align="center">
                     <Typography component='h4' variant='h4'>
-                        Create a Room
+                        {title}
                     </Typography>
                 </Grid>
                 {/* this will set the control of the playback state of our guest */}
@@ -99,7 +198,7 @@ export default class CreateRoomPage extends Component{
                         </FormHelperText>
                             <RadioGroup 
                                 row 
-                                defaultValue="true" 
+                                defaultValue={this.props.guestCanPause.toString()} 
                                 onChange={this.handleGuestCanPauseChange}>
                                 <FormControlLabel 
                                     value="true" control={<Radio color="primary" />}
@@ -120,7 +219,7 @@ export default class CreateRoomPage extends Component{
                             required={true} 
                             type="number" 
                             onChange={this.handleVotesChange}
-                            defaultValue={this.defaultVotes}
+                            defaultValue={this.state.votesToSkip}
                             // the double curly braces denotes us passing in an object
                             // and that object being a javascript script
                             inputProps={{
@@ -136,21 +235,10 @@ export default class CreateRoomPage extends Component{
                             </FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} align="center">
-                    <Button 
-                        color="primary" 
-                        variant="contained" 
-                        onClick={this.handleRoomButtonPressed}
-                        >
-                        Create A Room
-                    </Button>
-                </Grid>
-                <Grid item xs={12} align="center">
-                    {/* this simply say that this button will contain a link that
-                    will be redirected to / if it is pressed */}
-                    <Button color="secondary" variant="contained" to="/" component={Link}>
-                        Back
-                    </Button>
+                <Grid>
+                    {this.props.update
+                        ? this.renderUpdateButtons()
+                        : this.renderCreateButtons()}
                 </Grid>
             </Grid>
         );
