@@ -216,6 +216,19 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 76. Make another serializer for this view. Make the create room view, then add that to 
     the ursls.
 
-77. Now create the createroom page.
+77. Now create the createroom page by heading to the CreateRoomPage.js file.
 
-78.
+78. After that now you can start creating the backend logic. We're going to use react state
+    to keep track of what's in our form.
+
+79. After you define the functions to handle the state of your buttons, you want to hook
+    those functions to your buttons using the onChange attribute.
+
+80. Now we can send a post request from our frontend to our backend after we define our button functions in createroom.
+
+81. Now we need to create a view to look at room details.
+
+82. Start by making a new component which handles the page after we are in a room:
+        Room.js
+
+83.
