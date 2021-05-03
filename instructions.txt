@@ -263,4 +263,11 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 99. Need to install a new package in frontend.
         npm install @material-ui/lab
 
-100.
+100. Creating comments in jsx fucks up code.
+        {/* typography is basically just a nicely styled header from 
+        material-ui */}
+
+102. Also, while making changes to frontend, if I don't update git and add everything to the staging area, for some reason
+     chrome doesn't update the changes made to the frontend and loads old code even when I hard reset the cache.   
+
+103.

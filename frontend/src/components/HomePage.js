@@ -25,7 +25,7 @@ export default class HomePage extends Component {
     //the reason we're using async is becuase we're putting an asyncronous operation component in componentDidMount
     async componentDidMount() {
         //this is going to return to us whether or not we're in a room and if we are, then get that room code
-        fetch('/api/user-in-room')
+        fetch("/api/user-in-room")
         .then((response) => response.json())
         .then((data) => {
             this.setState({
@@ -76,7 +76,7 @@ export default class HomePage extends Component {
                             ) : (
                                 this.renderHomePage()
                             );
-                        }}s
+                        }}
                     />
                     <Route path="/join" component={RoomJoinPage} />
                     <Route path="/create" component={CreateRoomPage} />
