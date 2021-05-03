@@ -15,7 +15,7 @@ import { Collapse } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 
 export default class CreateRoomPage extends Component {
-  //these are the default parameters
+    //these are the default parameters
   static defaultProps = {
     votesToSkip: 2,
     guestCanPause: true,
@@ -34,13 +34,13 @@ export default class CreateRoomPage extends Component {
       successMsg: "",
     };
 
-    // this is binding the method to the class so that inside the method we have 
-    // access to the this keyword
+  // this is binding the method to the class so that inside the method we have 
+  // access to the this keyword
     this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
     this.handleVotesChange = this.handleVotesChange.bind(this);
     this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
-    this.handleUpdateButtonPressed = this.handleUpdateButtonPressed(this);
-  }   
+    this.handleUpdateButtonPressed = this.handleUpdateButtonPressed.bind(this);
+  }
 
   // e is the object that handles this function
   handleVotesChange(e) {
@@ -64,9 +64,9 @@ export default class CreateRoomPage extends Component {
     // now instead of loggin it lets create a request that will allow us to create the new 
     // with the information from this form
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       // this is telling us what type of contend is comming in
-      headers: {'Content-Type': 'application/json'},
+      headers: { "Content-Type": "application/json" },
       // this is taking a javascript object and turning it into a json string that we can send
       body: JSON.stringify({
         //these field names need to have underscores in order to match what is sent in the server
@@ -76,11 +76,11 @@ export default class CreateRoomPage extends Component {
         guest_can_pause: this.state.guestCanPause,
       }),
     };
-      //once we get a response take that response and convert it to json
-      fetch("/api/create-room", requestOptions)
-        .then((response) => response.json())
-        .then((data) => this.props.history.push("/room/" + data.code));
-        //for now just console log it to see our data
+    //once we get a response take that response and convert it to json
+    fetch("/api/create-room", requestOptions)
+      .then((response) => response.json())
+      .then((data) => this.props.history.push("/room/" + data.code));
+      //for now just console log it to see our data
         // .then((data) => console.log(data));
   }
 
@@ -103,8 +103,8 @@ export default class CreateRoomPage extends Component {
         this.setState({
           errorMsg: "Error updating room...",
         });
-        }
-        this.props.updateCallback();
+      }
+      this.props.updateCallback();
     });
   }
 
@@ -128,7 +128,7 @@ export default class CreateRoomPage extends Component {
       </Grid>
     );
   }
-  
+
   renderUpdateButtons() {
     return (
       <Grid item xs={12} align="center">
@@ -145,6 +145,7 @@ export default class CreateRoomPage extends Component {
 
   render() {
     const title = this.props.update ? "Update Room" : "Create a Room";
+
     // a grid in material-ui is the standard for aligning items in a grid vertically 
     // or horizontally
     // it uses the css flexbox
@@ -162,61 +163,62 @@ export default class CreateRoomPage extends Component {
             in={this.state.errorMsg != "" || this.state.successMsg != ""}
           >
             {this.state.successMsg != "" ? (
-            <Alert
-              severity="success"
-              onClose={() => {
-              this.setState({ successMsg: "" });
-              }}
-            >
-              {this.state.successMsg}
-            </Alert>
+              <Alert
+                severity="success"
+                onClose={() => {
+                  this.setState({ successMsg: "" });
+                }}
+              >
+                {this.state.successMsg}
+              </Alert>
             ) : (
-                  <Alert
-                    severity="error"
-                    onClose={() => {
-                    this.setState({ errorMsg: "" });
-                    }}
-                  >
-                    {this.state.errorMsg}
-                  </Alert>
-                )
-            }
+              <Alert
+                severity="error"
+                onClose={() => {
+                  this.setState({ errorMsg: "" });
+                }}
+              >
+                {this.state.errorMsg}
+              </Alert>
+            )}
           </Collapse>
         </Grid>
         <Grid item xs={12} align="center">
-            <Typography component='h4' variant='h4'>
-                {title}
-            </Typography>
+          <Typography component="h4" variant="h4">
+            {title}
+          </Typography>
         </Grid>
         {/* this will set the control of the playback state of our guest */}
         <Grid item xs={12} align="center">
           <FormControl component="fieldset">
             <FormHelperText>
-              <div align='center'>Guest Control of Playback State</div>
+              <div align="center">Guest Control of Playback State</div>
             </FormHelperText>
-              <RadioGroup 
-                row 
-                defaultValue={this.props.guestCanPause.toString()} 
-                onChange={this.handleGuestCanPauseChange}>
-                <FormControlLabel 
-                  value="true" control={<Radio color="primary" />}
-                  label="Play/Pause"
-                  labelPlacement="bottom"
-                />
-                <FormControlLabel
-                  value="false" 
-                  control={<Radio color="secondary" />}
-                  label="No Control"
-                  labelPlacement="bottom"
-                />
-              </RadioGroup>
+            <RadioGroup
+              row
+              defaultValue={this.props.guestCanPause.toString()}
+              onChange={this.handleGuestCanPauseChange}
+            >
+              <FormControlLabel
+                value="true"
+                control={<Radio color="primary" />}
+                label="Play/Pause"
+                labelPlacement="bottom"
+              />
+              <FormControlLabel
+                value="false"
+                control={<Radio color="secondary" />}
+                label="No Control"
+                labelPlacement="bottom"
+              />
+            </RadioGroup>
           </FormControl>
         </Grid>
         <Grid item xs={12} align="center">
           <FormControl>
-            <TextField 
-              required={true} 
-              type="number" 
+            <TextField
+              required={true}
+              type="number"
               onChange={this.handleVotesChange}
               defaultValue={this.state.votesToSkip}
               // the double curly braces denotes us passing in an object
@@ -226,7 +228,7 @@ export default class CreateRoomPage extends Component {
                 // text field is 1 this is so that we don't get a 
                 // negative value for votes
                 min: 1,
-                style: { textAlign: "center"},
+                style: { textAlign: "center" },
               }}
             />
             <FormHelperText>
@@ -234,9 +236,11 @@ export default class CreateRoomPage extends Component {
             </FormHelperText>
           </FormControl>
         </Grid>
+        <Grid>
         {this.props.update
           ? this.renderUpdateButtons()
           : this.renderCreateButtons()}
+        </Grid>
       </Grid>
     );
   }
