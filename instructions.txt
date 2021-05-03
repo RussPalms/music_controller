@@ -199,7 +199,7 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 70. Add the frontend app to the installed apps.
 
 71. Now let's add styling. Start by adding a css file to the frontend:
-        touch fronted/static/css/index.css
+        touch frontend/static/css/index.css
 
 72. Next start adding things to App.js.
 
@@ -272,4 +272,16 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 
 103. Begin working on spotify API.
 
-104.
+104.    <Grid container spacing={1}>
+        {/* this item will be in the contained grid 
+        xs defines the width of the grid should be when the size of it is 
+        extra small, 12 is just the moximum value making the maximum
+        screen width which fills the entire screen*/}
+                <Grid item xs={12} align="center">
+
+105. </Grid>
+        {/* this will set the control of the playback state of our guest */}
+        <Grid item xs={12} align="center">
+          <FormControl component="fieldset">
+
+106. 
