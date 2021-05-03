@@ -231,4 +231,14 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 82. Start by making a new component which handles the page after we are in a room:
         Room.js
 
-83.
+83. Now we need to set up our backend to retrieve the room info. Start by going to the views.py in api.
+
+84. Now that we created a getroom class we need to hook it up with an endpoint.
+
+85. Now we need to send the to our javascript to set up our room page. Start by going back to the Room.js.
+
+86. Go to the createroompage and make it so that it directs us to the correct page.
+
+89. Now center the create a room page so that it is centered vertically and horizontally.
+
+90.
