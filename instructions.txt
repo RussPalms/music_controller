@@ -270,4 +270,6 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 102. Also, while making changes to frontend, if I don't update git and add everything to the staging area, for some reason
      chrome doesn't update the changes made to the frontend and loads old code even when I hard reset the cache.   
 
-103.
+103. Begin working on spotify API.
+
+104.
