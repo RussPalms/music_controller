@@ -154,10 +154,6 @@ export default class CreateRoomPage extends Component {
     // the formula uses number_of_pixels * 8 
     return (
       <Grid container spacing={1}>
-        {/* this item will be in the contained grid 
-        xs defines the width of the grid should be when the size of it is 
-        extra small, 12 is just the moximum value making the maximum
-        screen width which fills the entire screen*/}
         <Grid item xs={12} align="center">
           <Collapse
             in={this.state.errorMsg != "" || this.state.successMsg != ""}
@@ -188,7 +184,6 @@ export default class CreateRoomPage extends Component {
             {title}
           </Typography>
         </Grid>
-        {/* this will set the control of the playback state of our guest */}
         <Grid item xs={12} align="center">
           <FormControl component="fieldset">
             <FormHelperText>
