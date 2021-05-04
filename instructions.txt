@@ -387,4 +387,6 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 
 143. After we complete the main components of the app we can work on hooks and functional components.
 
-144.
+144. Start by creating a funtional component that gives the user information about the app like a help button.
+     In this case create:
+        info.js   

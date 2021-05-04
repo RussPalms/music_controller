@@ -15,7 +15,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
 
-
 # # Create your views here.
 # # These views represent our application's endpoints. It comes after the slash and is basically
 # # a location on the webserver that you're going to
