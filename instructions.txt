@@ -284,4 +284,56 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
         <Grid item xs={12} align="center">
           <FormControl component="fieldset">
 
-106. 
+106. Fixed the comments, turns out my code was just shit.
+
+107. Now we can start using the spotify api. Go to the developer website and login:
+        https://developer.spotify.com/dashboard
+
+108. Click 'create an app'.
+
+109. Must keep track of client id and client secret and don't share it.
+
+110. Now create a new application that will handle all the spotify stuff:
+        python manage.py startapp spotify
+
+111. Create a urls.py file and credentials.py in the spotify app. The credentials.py file will store the client id, secret 
+     and redirect uri/url.
+
+112. Start setting up the authentication flow. Go to the views.py in spotify and create a view that can request authentication.
+
+113. Make sure requests is installed and install it through pip or conda:
+        pip install requests
+
+114. We need to create a database that will store all the tokens for all the users that are 
+     authenticated.
+
+115. Start by going to the models.py in spotify.
+
+116. Since we made a change to our model we need to make migrations again:
+        python manage.py makemigrations
+     Before you do this make sure the spotify app is added to installed apps in settings.   
+
+117. As soon as we get access to the information we want to store it in the database/spotifytoken model.
+
+118. Make a new python file in spotify:
+        util.py
+
+119. From the frontend we're going to call the AuthURL endpoint, then we're going to take the url that we recieve
+     and redirect to that page, then from that url after the user is done authorizing us we'll redirect to
+     the spotify_callback function, then from that function we'll send the request for the tokens, store the
+     tokens and redirect back to our original application.
+
+120. Now we need to write a function to check if a user is authenticated. We can do that in the util.py file.
+
+121. We need to create a new view. The utils.py is written in python, but we need json, so our frontend can understand.
+
+122. Now go to the frontend and configure that. As soon as we get into a room, if we are the host, then imediately
+     check to see if we are authenticated.
+
+123. Before we test the app we need to set the REDIRECT_URI.
+
+124. Another thing that needs to be done is configuring our settings for our project in the spotify developers
+     page. Go to settings and authorize the redirect url by adding the redirect url in credentials.py to
+     'Redirect URLs' then click add and save it.
+
+125. 

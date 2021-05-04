@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     # adding frontend app
     'frontend.apps.FrontendConfig',
+    #app for spotify
+    'spotify.apps.SpotifyConfig'
 ]
 
 MIDDLEWARE = [
