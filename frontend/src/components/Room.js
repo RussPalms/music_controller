@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Button, Typography } from "@material-ui/core";
 import CreateRoomPage from "./CreateRoomPage";
+import MusicPlayer from "./MusicPlayer";
 
 //this is the room page that is accessed as soon as a guest is in a room
 export default class Room extends Component {
@@ -26,9 +27,20 @@ export default class Room extends Component {
       this.renderSettingsButton = this.renderSettingsButton.bind(this);
       this.renderSettings = this.renderSettings.bind(this);
       this.getRoomDetails = this.getRoomDetails.bind(this);
-      this.getRoomDetails();
       this.authenticateSpotify = this.authenticateSpotify.bind(this);
-      this.getCurrentSong();
+      this.getCurrentSong = this.getCurrentSong.bind(this);
+      this.getRoomDetails();
+  }
+
+  //this is once the component has loaded on the screen
+  componentDidMount() {
+    //we put the function we want to call in here at every interval
+    this.interval = setInterval(this.getCurrentSong, 1000);
+  }
+  
+  //this will stop the interval from running
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   //this is for retrieving the data that's sent to our api url
@@ -90,10 +102,11 @@ export default class Room extends Component {
             return response.json()
         }
         //this is setting the state of what song is currently playing
-      }).then((data) => {
+      })
+        .then((data) => {
           this.setState({ song: data })
           console.log(data);
-        })
+        });
   }
 
   leaveButtonPressed() {
@@ -173,7 +186,11 @@ export default class Room extends Component {
             Code: {this.roomCode}
           </Typography>
         </Grid>
-        {this.state.song}
+        {/* here we're passing in all the information relating to the song
+        we can do that by using the spread operator
+        this will pass the information as seperate keys or props to the musicplayer */}
+        <MusicPlayer {...this.state.song} />
+        {/* {this.state.song} */}
         {/* we only need this information for debugging */}
         {/* <Grid item xs={12} align="center">
           <Typography variant="h6" component="h6">

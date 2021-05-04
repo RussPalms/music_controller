@@ -350,6 +350,7 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 
 131. Now we need to make modifications to the room page to display the song info to the screen.
 
-132. We don't need the stuff that we used to test the frontend anymore.
+132. We don't need the stuff that we used to test the frontend anymore such as host, guestcanpause, and votes.
 
-133.
+133. Start to create a new component and name it:
+        MusicPlayer.js
