@@ -354,3 +354,15 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 
 133. Start to create a new component and name it:
         MusicPlayer.js
+
+134. We need to make an interval in the room page to pull requests for the current state
+     of the song. Start by creating lifecycle methods. Every second we're going to update
+     the state.
+
+135. After we've added the music player we can add functionality to the play pause and skip buttons.
+     Start with creating views for them.   
+
+136. Whenever you're dealing with access tokens you want to always have them in your backend.
+
+137. To fix the rendering when the player is initially starting, create a defult title and album cover to take 
+     care of that.   

@@ -18,6 +18,22 @@ export default class MusicPlayer extends Component {
     super(props);
   }
 
+  pauseSong() {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+    };
+        fetch("/spotify/pause", requestOptions);
+  }
+
+  playSong() {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+    };
+        fetch("/spotify/play", requestOptions);
+  }
+
   //we want this to just look like a generic media player
   render() {
     //this will give us the progress of the current state of the song
@@ -53,7 +69,11 @@ export default class MusicPlayer extends Component {
             <div>
                 {/* to use the IconButton you need to put an icon inside of the tag 
                 then inside you can do things like the onClick*/}
-              <IconButton>
+              <IconButton onClick={() => {
+                // we're calling the pause/play button and it will depend on whether or not a song is play or not
+                  this.props.is_playing ? this.pauseSong() : this.playSong();
+              }}
+              >
                   {/* this will show a different icon based on wheteher or 
                   not a song is playing */}
                 {this.props.is_playing ? <PauseIcon /> : <PlayArrowIcon />}

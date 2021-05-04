@@ -117,3 +117,29 @@ class CurrentSong(APIView):
         #our application is calling this endpoint, this endpoint in turn calls the spotify endpoint, which then gives
         #us information, we parse through it, then send back the necessary information
         return Response(song, status=status.HTTP_200_OK)
+
+
+class PauseSong(APIView):
+    #the request we're going to send to the spotify api will be a put request
+    #in this case we're updating information/state of the song so it's good to mirror the requests
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        #check if the guests are allows to play or pause the song or if the current user is the host of the room
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            pause_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+class PlaySong(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            play_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+        
