@@ -17,9 +17,13 @@
     />
     </head>
     <body>
-        <div id="main">
+        {% comment %} <div id="main">
             <!--this is where our react code will go-->
-            <div id="app"></div>
+            <div id="app"></div> {% endcomment %}
+        <div id="gradient">
+            <div id="main">
+                <div id="app"></div>
+            </div>
         </div>
         <!--this is going to load the script-->
         <script src="{% static "frontend/main.js" %}"></script>

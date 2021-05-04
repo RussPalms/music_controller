@@ -31,7 +31,7 @@ DEBUG = True
 # running on, then go to <that ip address>:8000 
 # you can also add your ip address to the list of allowed hosts as well as the port number you want to run it
 # off of
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', '10.0.0.6', '10.0.0.23']
 
 
 # Application definition
