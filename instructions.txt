@@ -336,4 +336,20 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
      page. Go to settings and authorize the redirect url by adding the redirect url in credentials.py to
      'Redirect URLs' then click add and save it.
 
-125. 
+125. Now we get start to work on getting information to the currently playing song and display that to the screen.
+
+126. Send a request to the spotify api to get the host of the room's playback information.
+
+127. Now that we have our execute_spotify_api_request function we can send a request to any spotify api endpoint.
+
+128. Now we need to send a request to our endpoint in the views.py.
+
+129. Now that we're able to get information from the currently playing song we can now parse through it.
+
+130. To access the information of the song simply look through the json that is returned.
+
+131. Now we need to make modifications to the room page to display the song info to the screen.
+
+132. We don't need the stuff that we used to test the frontend anymore.
+
+133.

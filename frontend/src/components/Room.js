@@ -12,7 +12,11 @@ export default class Room extends Component {
           guestCanPause: false,
           isHost: false,
           showSettings: false,
-          spotifyAuthenticated: false
+          spotifyAuthenticated: false,
+          //this is going to contain all of the information relating to the current song
+          //it is where we'll pass in the json request from our backend
+          //if the song changes it'll update the state of this components as display the current song
+          song: {},
       };
       //match is the prop that stores information about how we got to this component from react router
       this.roomCode = this.props.match.params.roomCode;
@@ -24,6 +28,7 @@ export default class Room extends Component {
       this.getRoomDetails = this.getRoomDetails.bind(this);
       this.getRoomDetails();
       this.authenticateSpotify = this.authenticateSpotify.bind(this);
+      this.getCurrentSong();
   }
 
   //this is for retrieving the data that's sent to our api url
@@ -57,9 +62,10 @@ export default class Room extends Component {
       .then((data) => {
         //set the state of whether the user is authenticated or not
         this.setState({spotifyAuthenticated: data.status });
+        console.log(data.status);
         //if they're not authenticated, then authenticate them
         if (!data.status) {
-          fetch('/spotify/get-auth-url')
+          fetch("/spotify/get-auth-url")
             .then((response) => response.json())
             //data is going to be the url that we need to authenticate
             .then((data) => {
@@ -72,6 +78,22 @@ export default class Room extends Component {
             })
         }
       })
+  }
+  
+  //this should get called after we're authenticated
+  getCurrentSong() {
+    fetch("/spotify/current-song")
+      .then((response) => {
+        if (!response.ok) {
+          return {};
+        } else {
+            return response.json()
+        }
+        //this is setting the state of what song is currently playing
+      }).then((data) => {
+          this.setState({ song: data })
+          console.log(data);
+        })
   }
 
   leaveButtonPressed() {
@@ -151,7 +173,9 @@ export default class Room extends Component {
             Code: {this.roomCode}
           </Typography>
         </Grid>
-        <Grid item xs={12} align="center">
+        {this.state.song}
+        {/* we only need this information for debugging */}
+        {/* <Grid item xs={12} align="center">
           <Typography variant="h6" component="h6">
             Votes: {this.state.votesToSkip}
           </Typography>
@@ -165,7 +189,7 @@ export default class Room extends Component {
           <Typography variant="h6" component="h6">
             Host: {this.state.isHost.toString()}
           </Typography>
-        </Grid>
+        </Grid> */}
         {/* this just shows conditionally to show the settings button if the user is a host or not */}
         {this.state.isHost ? this.renderSettingsButton() : null}
         <Grid item xs={12} align="center">
