@@ -34,6 +34,14 @@ export default class MusicPlayer extends Component {
         fetch("/spotify/play", requestOptions);
   }
 
+  skipSong() {
+    const requestOptions = {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" }
+    };
+        fetch("/spotify/skip", requestOptions)
+  }
+
   //we want this to just look like a generic media player
   render() {
     //this will give us the progress of the current state of the song
@@ -78,8 +86,14 @@ export default class MusicPlayer extends Component {
                   not a song is playing */}
                 {this.props.is_playing ? <PauseIcon /> : <PlayArrowIcon />}
               </IconButton>
-              <IconButton>
-                <SkipNextIcon />
+              {/* we're using an arrow function so that we don't have to bind the skipSong function to the this 
+              keyword inside the constructor, but it doesn't even matter in this case, because we're not
+              even using the this keyword in the function*/}
+              <IconButton onClick={() => this.skipSong()}>
+                  {/* this is displaying the number of current votes and number of required votes to skip*/}
+                    {this.props.votes} /{" "} 
+                    {this.props.votes_required}
+                    <SkipNextIcon /> 
               </IconButton>
             </div>
           </Grid>

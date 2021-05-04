@@ -26,7 +26,12 @@ SECRET_KEY = 'django-insecure-4%abnb0c@0*-f!n8h+r9e9pg(%^uebxn0r6x-6al1a(6r+3ix@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# this is where you can enter in a host ip and allow others on the same network to connect to your app
+# in order to run the app like this you need to get the ip address of the local host that the app is currently
+# running on, then go to <that ip address>:8000 
+# you can also add your ip address to the list of allowed hosts as well as the port number you want to run it
+# off of
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition

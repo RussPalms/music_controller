@@ -366,3 +366,25 @@ or if you want to completely turn off the setting: "editor.acceptSuggestionOnEnt
 
 137. To fix the rendering when the player is initially starting, create a defult title and album cover to take 
      care of that.   
+
+138. Time to build out the voting system. Start with building out the infrastructure for skipping the song.
+
+139. If we were writing a giant application and handle all the exceptions we would want to check if a room exists.
+     We would also want to make sure that the user has a current session, because they could theoretically send
+     a request if they don't have a session.
+
+140. After we've updated our api and spotify model to handle the votes let's make migrations again:
+        python manage.py makemigrations
+        python manage.py migrate
+
+141. If you want to run this app on any local area network you can specify the server you want to run when executing
+     the runserver command for example if you wanted to run off the port 8000:
+        python manage.py runserver 0.0.0.0:8000
+
+142. If you want to run it like this head to settings.py, go to ALLOWED_HOSTS and add the i.p. address, in this
+     case it will be:
+        0.0.0.0   
+
+143. After we complete the main components of the app we can work on hooks and functional components.
+
+144.

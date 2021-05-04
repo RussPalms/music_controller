@@ -7,6 +7,7 @@ from rest_framework.response import Response
 #import * imports everything from the file so we can use anything defined in there
 from .util import *
 from api.models import Room
+from .models import Vote
 
 class AuthURL(APIView):
     def get(self, request, format=None):
@@ -101,6 +102,8 @@ class CurrentSong(APIView):
             name = artist.get('name')
             artist_string += name
 
+        # this is to return the number of votes for our current song
+        votes = len(Vote.objects.filter(room=room, song_id=song_id))
         #this is going to contain all the information we need to send to the frontend
         song = {
             'title': item.get('name'),
@@ -109,15 +112,30 @@ class CurrentSong(APIView):
             'time': progress,
             'image_url': album_cover,
             'is_playing': is_playing,
-            'votes': 0,
+            'votes': votes,
+            # this ensures that we're constantly updating the number of votes on a current song
+            'votes_required': room.votes_to_skip,
             'id': song_id
         }
+
+        # this is to update our room for voting
+        self.update_room_song(room, song_id)
         
         #song is our custom object that we'll send to the frontend
         #our application is calling this endpoint, this endpoint in turn calls the spotify endpoint, which then gives
         #us information, we parse through it, then send back the necessary information
         return Response(song, status=status.HTTP_200_OK)
+    
+    # every time I want to get the current song I want to update the room with the current playing song ID
+    def update_room_song(self, room, song_id):
+        current_song = room.current_song
 
+        # this is saying if the song didn't change, update it in our room
+        if current_song != song_id:
+            room.current_song = song_id
+            room.save(update_fields=['current_song'])
+            # this will delete any room object we pass in 
+            votes = Vote.objects.filter(room=room).delete()
 
 class PauseSong(APIView):
     #the request we're going to send to the spotify api will be a put request
@@ -141,5 +159,30 @@ class PlaySong(APIView):
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+# a user will only be allowed to vote for a song in a room that they're currently in
+class SkipSong(APIView):
+    # we're using post, because we're updating somthing in the database in this case adding a new vote
+    # when we call this post request, this is someone requesting to skip the current song
+    def post(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        # we want to make sure we're not grabbing old votes
+        votes =Vote.objects.filter(room=room, song_id=room.current_song)
+        # we need to know how many votes we actually need in order to skip
+        votes_needed = room.votes_to_skip
+
+        # this is giving us the logic of when the song is ready to be skipped
+        if self.request.session.session_key == room.host or len(votes) + 1 >= votes_needed:
+            # if we skip the song we should automatically clear all the votes that we just had
+            votes.delete()
+            skip_song(room.host)
+        else:
+            # if that isn't the case we need to create a new vote
+            vote = Vote(user=self.request.session.session_key, room=room, song_id=room.current_song)
+            vote.save()
+            pass
+
+        return Response({}, status.HTTP_204_NO_CONTENT)
 
         
