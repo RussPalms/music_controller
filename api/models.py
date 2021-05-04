@@ -28,3 +28,5 @@ class Room(models.Model):
     # this means we never have to pass the date-time to our object
     # meaning whenever we create a room it automotically adds the date and time that we're at
     created_at = models.DateTimeField(auto_now_add=True)
+    # we need to keep track of the current song that's playing in the room
+    current_song = models.CharField(max_length=50, null=True)
