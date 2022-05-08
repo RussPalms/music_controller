@@ -32,7 +32,8 @@ DEBUG = True
 # running on, then go to <that ip address>:8000 
 # you can also add your ip address to the list of allowed hosts as well as the port number you want to run it
 # off of
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'fathomless-fjord-48768.herokuapp.com']
+# ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'fathomless-fjord-48768.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
 
 # Application definition
