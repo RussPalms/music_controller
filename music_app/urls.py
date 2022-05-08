@@ -22,6 +22,7 @@ urlpatterns = [
     # what this says is whatever is entered in the path, dispatch it to api.urls
     path('api/', include('api.urls')),
     # this is the path that points towards the frontend
-    path('', include('frontend.urls')),
+    # path('', include('frontend.urls')),
+    path('https://fathomless-fjord-48768.herokuapp.com', include('frontend.urls')),
     path('spotify/', include('spotify.urls'))
 ]
